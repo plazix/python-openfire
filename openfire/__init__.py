@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-VERSION = (0, 1, 0, 'alpha', 1)
+VERSION = (0, 2, 0, 'beta', 0)
 
 from exception import (HTTPException, InvalidResponseException, UserServiceDisabledException,
                        RequestNotAuthorisedException, IllegalArgumentException, UserNotFoundException,
                        UserAlreadyExistsException)
 
 from user_service import UserService
+from presence import Presence
 
 
 def get_version():

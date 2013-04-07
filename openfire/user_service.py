@@ -3,18 +3,11 @@
 User Service Plugin
 """
 
-try:
-    # python 3
-    from urllib.request import urlopen
-    from urllib.error import URLError
-except ImportError:
-    # python 2
-    from urllib2 import urlopen, URLError
 import re
 
-from exception import (HTTPException, InvalidResponseException, UserServiceDisabledException,
-                       RequestNotAuthorisedException, IllegalArgumentException, UserNotFoundException,
-                       UserAlreadyExistsException)
+from base import OpenFireBase
+from exception import (InvalidResponseException, UserServiceDisabledException, RequestNotAuthorisedException,
+                       IllegalArgumentException, UserNotFoundException, UserAlreadyExistsException)
 
 EXCEPTION_MAP = {
     'IllegalArgumentException': IllegalArgumentException,
@@ -24,16 +17,16 @@ EXCEPTION_MAP = {
     'UserServiceDisabled': UserServiceDisabledException,
 }
 
-class UserService(object):
+class UserService(OpenFireBase):
     def __init__(self, url, secret, api_path='plugins/userService/userservice'):
         """
         :param url:
         :param secret: The secret key that allows access to the User Service.
         :param api_path:
         """
-        self.url = url
+        super(UserService, self).__init__(url, api_path)
+
         self.secret = secret
-        self.api_path = api_path
 
     def add_user(self, username, password, name=None, email=None, groups=None):
         """
@@ -45,7 +38,8 @@ class UserService(object):
         :param email: The email address of the user
         :param groups: List of groups where the user is a member
         """
-        self.__submit_request('add', {
+        self._submit_request({
+            'type': 'add',
             'username': username,
             'password': password,
             'name': name,
@@ -59,7 +53,8 @@ class UserService(object):
 
         :param username: The username of the user. ie the part before the @ symbol.
         """
-        self.__submit_request('delete', {
+        self._submit_request({
+            'type': 'delete',
             'username': username
         })
 
@@ -73,7 +68,8 @@ class UserService(object):
         :param email: The email address of the user
         :param groups: List of groups where the user is a member
         """
-        self.__submit_request('update', {
+        self._submit_request({
+            'type': 'update',
             'username': username,
             'password': password,
             'name': name,
@@ -87,7 +83,8 @@ class UserService(object):
 
         :param username: The username of the user. ie the part before the @ symbol.
         """
-        self.__submit_request('disable', {
+        self._submit_request({
+            'type': 'disable',
             'username': username
         })
 
@@ -97,30 +94,17 @@ class UserService(object):
 
         :param username: The username of the user. ie the part before the @ symbol.
         """
-        self.__submit_request('enable', {
+        self._submit_request({
+            'type': 'enable',
             'username': username
         })
 
-    def __submit_request(self, request_type, params):
-        try:
-            response = urlopen(self.__build_query(request_type, params))
+    def _build_query(self, params):
+        params.update({'secret': self.secret})
 
-            return self.__parse_response(response.read())
-        except URLError, e:
-            raise HTTPException(e.reason)
+        return super(UserService, self)._build_query(params)
 
-    def __build_query(self, request_type, params):
-        params.update({'secret': self.secret, 'type': request_type})
-
-        query_params = []
-        for key in params:
-            if params[key] is not None:
-                query_params.append('%s=%s' % (key, params[key]))
-        uri_query = '&'.join(query_params)
-
-        return u'%s%s?%s' % (self.url, self.api_path, uri_query)
-
-    def __parse_response(self, data):
+    def _parse_response(self, data):
         match = re.search(r'<error>(.*)</error>', data)
         if match:
             exception = match.group(1)
