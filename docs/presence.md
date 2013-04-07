@@ -3,10 +3,10 @@ Usage
 
 Create a new Presence object
 
-  from openfire import Presence
+	from openfire import Presence
 
-  api = Presence("http://localhost:9090/")
+	api = Presence("http://localhost:9090/")
 
 check user status
 
-  api.check("user")
+	api.check("user")
