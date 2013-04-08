@@ -9,4 +9,4 @@ Create a new Presence object
 
 check user status
 
-	api.check("user")
+	api.status("user")

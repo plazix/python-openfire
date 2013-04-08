@@ -9,7 +9,7 @@ from exception import UserNotFoundException
 
 class Presence(OpenFireBase):
     STATUS_AVAILABLE = 'available'
-    STATUS_CHAR = 'chat'
+    STATUS_CHAT = 'chat'
     STATUS_AWAY = 'away'
     STATUS_XA = 'xa'
     STATUS_DND = 'dnd'
@@ -27,7 +27,7 @@ class Presence(OpenFireBase):
         """
         super(Presence, self).__init__(url, api_path)
 
-    def check(self, username, type=TYPE_TEXT):
+    def status(self, username, type=TYPE_TEXT):
         """
         Check user status
 
