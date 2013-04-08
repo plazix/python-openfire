@@ -19,5 +19,5 @@ Install from source:
 Supported
 ---------------
 
-* [User Service Plugin](blob/master/docs/user_service.md)
-* [Presence Plugin](blob/master/docs/presence.md)
+* [User Service Plugin](docs/user_service.md)
+* [Presence Plugin](docs/presence.md)
