@@ -10,12 +10,12 @@ Create a new UserService object
 register new user
 
 	api.add_user("user", "pass")
-	api.add_user("user", "pass", "name", "email", "group1,group2")
+	api.add_user("user", "pass", "name", "email", ["group1", "group2"])
 
 update existing user
 
 	api.update_user("user", "pass")
-	api.update_user("user", "pass", "name", "email", "group1,group2")
+	api.update_user("user", "pass", "name", "email", ["group1", "group2"])
 
 delete user
 

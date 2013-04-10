@@ -16,9 +16,9 @@ class Presence(OpenFireBase):
     STATUS_OFFLINE = 'offline'
     STATUS_FORBIDDEN = 'forbidden'
 
-    TYPE_IMAGE = 'image'
-    TYPE_TEXT = 'text'
-    TYPE_XML = 'xml'
+    RESPONSE_TYPE_IMAGE = 'image'
+    RESPONSE_TYPE_TEXT = 'text'
+    RESPONSE_TYPE_XML = 'xml'
 
     def __init__(self, url, api_path='plugins/presence/status'):
         """
@@ -27,7 +27,7 @@ class Presence(OpenFireBase):
         """
         super(Presence, self).__init__(url, api_path)
 
-    def status(self, username, type=TYPE_TEXT):
+    def status(self, username, response_type=RESPONSE_TYPE_TEXT):
         """
         Check user status
 
@@ -36,7 +36,7 @@ class Presence(OpenFireBase):
         """
         return self._submit_request({
             'jid': self._get_full_username(username),
-            'type': type
+            'type': response_type
         })
 
     def _get_full_username(self, username):

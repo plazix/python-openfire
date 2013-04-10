@@ -38,13 +38,17 @@ class UserService(OpenFireBase):
         :param email: The email address of the user
         :param groups: List of groups where the user is a member
         """
-        self._submit_request({
+        groups_str = None
+        if groups:
+            groups_str = ','.join(groups)
+
+        return self._submit_request({
             'type': 'add',
             'username': username,
             'password': password,
             'name': name,
             'email': email,
-            'groups': groups,
+            'groups': groups_str,
         })
 
     def delete_user(self, username):
@@ -53,7 +57,7 @@ class UserService(OpenFireBase):
 
         :param username: The username of the user. ie the part before the @ symbol.
         """
-        self._submit_request({
+        return self._submit_request({
             'type': 'delete',
             'username': username
         })
@@ -68,13 +72,17 @@ class UserService(OpenFireBase):
         :param email: The email address of the user
         :param groups: List of groups where the user is a member
         """
-        self._submit_request({
+        groups_str = None
+        if groups:
+            groups_str = ','.join(groups)
+
+        return self._submit_request({
             'type': 'update',
             'username': username,
             'password': password,
             'name': name,
             'email': email,
-            'groups': groups,
+            'groups': groups_str,
         })
 
     def lock_user(self, username):
@@ -83,7 +91,7 @@ class UserService(OpenFireBase):
 
         :param username: The username of the user. ie the part before the @ symbol.
         """
-        self._submit_request({
+        return self._submit_request({
             'type': 'disable',
             'username': username
         })
@@ -94,7 +102,7 @@ class UserService(OpenFireBase):
 
         :param username: The username of the user. ie the part before the @ symbol.
         """
-        self._submit_request({
+        return self._submit_request({
             'type': 'enable',
             'username': username
         })
