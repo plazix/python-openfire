@@ -107,6 +107,22 @@ class UserService(OpenFireBase):
             'username': username
         })
 
+    def add_roster(self, username, item_jid, subscription):
+        return self._submit_request({
+            'type': 'add_roster',
+            'username': username,
+            'item_jid': item_jid,
+            'subscription': subscription
+        })
+
+    def delete_roster(self, username, item_jid):
+        return self._submit_request({
+            'type': 'delete_roster',
+            'username': username,
+            'item_jid': item_jid
+        })
+            
+
     def _build_query(self, params):
         params.update({'secret': self.secret})
 
