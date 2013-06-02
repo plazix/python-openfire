@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-User Service Plugin
+User Service Plugin.
+
+See http://www.igniterealtime.org/projects/openfire/plugins/userservice/readme.html
 """
 
 import re
@@ -17,7 +19,14 @@ EXCEPTION_MAP = {
     'UserServiceDisabled': UserServiceDisabledException,
 }
 
+
 class UserService(OpenFireBase):
+    SUBSCRIPTION_REMOVE = -1
+    SUBSCRIPTION_NONE = 0
+    SUBSCRIPTION_TO = 1
+    SUBSCRIPTION_FROM = 2
+    SUBSCRIPTION_BOTH = 3
+
     def __init__(self, url, secret, api_path='plugins/userService/userservice'):
         """
         :param url:
@@ -107,21 +116,46 @@ class UserService(OpenFireBase):
             'username': username
         })
 
-    def add_roster(self, username, item_jid, subscription):
+    def add_roster(self, username, item_jid, name=None, subscription=None):
+        """
+        :param username: The username of the user. ie the part before the @ symbol.
+        :param item_jid: The JID of the roster item
+        :param name: The display name of the new user
+        :param subscription: Type of subscription
+        """
         return self._submit_request({
             'type': 'add_roster',
             'username': username,
             'item_jid': item_jid,
+            'name': name,
+            'subscription': subscription
+        })
+
+    def update_roster(self, username, item_jid, name=None, subscription=None):
+        """
+        :param username: The username of the user. ie the part before the @ symbol.
+        :param item_jid: The JID of the roster item
+        :param name: The display name of the new user
+        :param subscription: Type of subscription
+        """
+        return self._submit_request({
+            'type': 'update_roster',
+            'username': username,
+            'item_jid': item_jid,
+            'name': name,
             'subscription': subscription
         })
 
     def delete_roster(self, username, item_jid):
+        """
+        :param username: The username of the user. ie the part before the @ symbol.
+        :param item_jid: The JID of the roster item
+        """
         return self._submit_request({
             'type': 'delete_roster',
             'username': username,
             'item_jid': item_jid
         })
-            
 
     def _build_query(self, params):
         params.update({'secret': self.secret})
